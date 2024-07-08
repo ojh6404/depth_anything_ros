@@ -1,0 +1,43 @@
+<launch>
+  <arg name="namespace" default="depth_anything" />
+  <arg name="input_image" default="/camera/rgb/image_rect_color"/>
+  <arg name="input_depth" default="/depth_anything/depth_registered/image_rect"/>
+  <arg name="output_cloud" default="/$(arg namespace)/depth_registered/points" />
+  <arg name="camera_info" default="/camera/rgb/camera_info"/>
+  <arg name="model" default="vitl"/>
+  <arg name="model_path" default="$(find depth_anything_ros)/trained_data/depth_anything_v2_metric_hypersim_$(arg model).engine"/>
+  <arg name="depth_scale" default="0.5"/>
+
+  <arg name="nodelet_manager" value="nodelet_manager" />
+
+  <!-- depth_estimation -->
+  <group ns="$(arg namespace)">
+    <!-- nodelet manager -->
+    <node name="nodelet_manager" pkg="nodelet" type="nodelet" args="manager"
+          respawn="true"
+          output="screen" />
+
+    <!-- depth anything -->
+    <node name="depth_estimation" pkg="depth_anything_ros" type="depth_estimation_node.py" output="screen" >
+      <remap from="~input_image" to="$(arg input_image)" />
+      <remap from="~depth_registered/image_rect" to="$(arg input_depth)" />
+      <rosparam subst_value="true" >
+        model_path: $(arg model_path)
+        depth_scale: $(arg depth_scale)
+      </rosparam>
+    </node>
+
+    <!-- create point cloud -->
+    <node pkg="nodelet" type="nodelet" name="point_cloud_xyzrgb"
+          args="load depth_image_proc/point_cloud_xyzrgb $(arg nodelet_manager)" output="screen" >
+      <remap from="rgb/camera_info" to="$(arg camera_info)" />
+      <remap from="rgb/image_rect_color" to="$(arg input_image)" />
+      <remap from="depth_registered/image_rect" to="$(arg input_depth)" />
+      <remap from="depth_registered/points" to="$(arg output_cloud)" />
+      <rosparam>
+        queue_size: 100
+      </rosparam>
+    </node>
+  </group>
+
+</launch>

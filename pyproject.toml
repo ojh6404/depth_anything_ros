@@ -1,0 +1,21 @@
+[tool.ruff]
+line-length = 120
+target-version = "py38"
+exclude = [
+    "4D-Humans",
+    "Arbitrary-Hands-3D-Reconstruction",
+    "frankmocap",
+    "hamer",
+    "tests/data",
+    ".eggs",
+    ".git",
+    ".ruff_cache",
+    "__pypackages__",
+    "buck-out",
+    "build",
+    "dist",
+]
+
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "N", "B", "C4", "SIM"]

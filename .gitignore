@@ -1,0 +1,12 @@
+.DS_Store
+.idea
+*.log
+.vscode
+tmp/
+trained_data
+
+*.pth
+*.onnx
+*.engine
+*.pyc
+*.bag

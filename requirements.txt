@@ -1,0 +1,9 @@
+pycuda
+cuda-python
+tensorrt
+onnxruntime-gpu
+torch
+torchvision
+opencv-python
+open3d
+gdown

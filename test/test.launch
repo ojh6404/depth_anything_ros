@@ -1,0 +1,32 @@
+<launch>
+  <arg name="input_image" default="/kinect_head/rgb/image_rect_color"/>
+  <arg name="input_depth" default="/depth_anything/depth_registered/image_rect"/>
+  <arg name="output_cloud" default="/depth_anything/depth_registered/points" />
+  <arg name="camera_info" default="/kinect_head/rgb/camera_info"/>
+  <arg name="model" default="vitl"/>
+  <arg name="depth_scale" default="0.8"/>
+  <arg name="robot_model" default="$(find depth_anything_ros)/test/pr2.urdf"/>
+
+  <!-- play rosbag -->
+  <node pkg="rosbag" type="play" name="rosbag_play"
+          args="$(find depth_anything_ros)/test/test.bag --loop --clock" output="screen" >
+  </node>
+  <node pkg="image_transport" type="republish" name="decompressor"
+        args="compressed in:=$(arg input_image) raw out:=$(arg input_image)" output="screen" />
+
+  <!-- for visualize robot model -->
+  <param name="robot_description" command="$(find xacro)/xacro $(arg robot_model)" />
+  <param name="use_sim_time" value="true" />
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find depth_anything_ros)/test/test.rviz" />
+
+  <!-- depth_estimation -->
+  <include file="$(find depth_anything_ros)/launch/depth_estimation.launch" >
+    <arg name="model" value="$(arg model)"/>
+    <arg name="input_image" value="$(arg input_image)"/>
+    <arg name="input_depth" value="$(arg input_depth)"/>
+    <arg name="output_cloud" value="$(arg output_cloud)" />
+    <arg name="camera_info" value="$(arg camera_info)"/>
+    <arg name="depth_scale" value="$(arg depth_scale)"/>
+  </include>
+</launch>
