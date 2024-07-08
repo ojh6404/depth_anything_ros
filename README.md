@@ -2,7 +2,7 @@
 
 ROS1 wrapper for [Depth Anything V2](https://github.com/DepthAnything/Depth-Anything-V2.git).
 
-## Pointcloud Generation (only using RGB Image and Camera Info Topic)
+## Creating Pointcloud without depth
 ![Alt text](assets/demo.gif)
 
 ## Setup
