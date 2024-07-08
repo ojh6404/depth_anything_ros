@@ -17,7 +17,6 @@ This package is build upon
 ### Build package
 
 #### on your workspace
-If you want build this package directly on your workspace, please be aware of python environment dependencies (python3.9 and pytorch is needed to build package).
 ```bash
 mkdir -p ~/ros/catkin_ws/src && cd ~/ros/catkin_ws/src
 git clone https://github.com/ojh6404/depth_anything_ros.git
