@@ -73,8 +73,8 @@ int main(int argc, char **argv) {
     // Rescale the depth image
     depth_mat = depth_mat * depth_scale;
 
-    // Resizing predicted depth image to the same size as the input image
-    cv::resize(depth_mat, depth_mat, cv::Size(image.cols, image.rows));
+    // Resizing predicted depth image to the same size as the input image with nearest neighbor interpolation
+    cv::resize(depth_mat, depth_mat, cv::Size(image.cols, image.rows), 0, 0, cv::INTER_NEAREST);
 
     // publish depth image
     sensor_msgs::ImagePtr depth_msg =

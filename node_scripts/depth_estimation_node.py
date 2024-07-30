@@ -59,9 +59,9 @@ class DepthAnythingNode(object):
 
                 # Process the depth output
                 depth = np.reshape(depth, (INPUT_WIDTH, INPUT_HEIGHT)) * self.depth_scale
-                depth = cv2.resize(depth, (orig_w, orig_h), interpolation=cv2.INTER_CUBIC)
+                depth = cv2.resize(depth, (orig_w, orig_h), interpolation=cv2.INTER_NEAREST)
                 depth_msg = self.bridge.cv2_to_imgmsg(depth, encoding="32FC1")
-                depth_msg.header.stamp = rospy.Time.now()
+                depth_msg.header.stamp = self.image_msg.header.stamp
                 depth_msg.header.frame_id = self.image_msg.header.frame_id
                 self.pub_depth.publish(depth_msg)
                 self.image_msg = None
